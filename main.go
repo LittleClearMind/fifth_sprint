@@ -28,6 +28,9 @@ type Training struct {
 // количество_повторов * длина_шага / м_в_км
 func (t Training) distance() float64 {
 	// вставьте ваш код ниже
+	if MInKm == 0 {
+		return 0
+	}
 	return (float64(t.Action) * t.LenStep / MInKm)
 }
 
@@ -106,6 +109,9 @@ type Running struct {
 // Это переопределенный метод Calories() из Training.
 func (r Running) Calories() float64 {
 	// вставьте ваш код ниже
+	if MInKm == 0 {
+		return 0
+	}
 	num := CaloriesMeanSpeedMultiplier*r.meanSpeed() + CaloriesMeanSpeedShift
 	return (num * r.Weight / MInKm * float64(r.Duration.Hours()) * MinInHours)
 }
@@ -141,7 +147,9 @@ func (w Walking) Calories() float64 {
 	if w.Height == 0 {
 		return 0
 	}
-
+	if CmInM == 0 {
+		return 0
+	}
 	speed := w.meanSpeed() * KmHInMsec
 	squaerSpeed := math.Pow(speed, 2)
 	num := CaloriesWeightMultiplier*w.Weight + (squaerSpeed/(w.Height/CmInM))*CaloriesSpeedHeightMultiplier*w.Weight
@@ -177,6 +185,9 @@ type Swimming struct {
 func (s Swimming) meanSpeed() float64 {
 	// вставьте ваш код ниже
 	if s.Duration.Hours() == 0 {
+		return 0
+	}
+	if MInKm == 0 {
 		return 0
 	}
 	return float64(s.LengthPool) * float64(s.CountPool) / MInKm / s.Duration.Hours()
